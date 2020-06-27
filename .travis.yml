@@ -1,0 +1,22 @@
+---
+env:
+  global:
+    - CC_TEST_REPORTER_ID=8349d16308533abc902ffd87464be00887c388747c003ff8fae3877d53a2f6f9
+sudo: false
+language: ruby
+cache: bundler
+rvm:
+  - 2.4.10
+  - 2.5.8
+  - 2.6.6
+  - 2.7.1
+before_install: bash bin/setup
+before_script:
+  - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+  - chmod +x ./cc-test-reporter
+  - ./cc-test-reporter before-build
+script:
+  - 'bundle exec rubocop --fail-fast'
+  - 'bundle exec rspec --fail-fast'
+after_script:
+  - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
